@@ -56,12 +56,22 @@ const defaultData = {
 export const useStore = () => {
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem("ssma_products");
+    console.log(
+      "🔄 Loading from localStorage...",
+      saved ? "✅ Found data" : "❌ No data, using default",
+    );
     return saved ? JSON.parse(saved) : defaultData.products;
   });
 
   // Save to localStorage whenever products change
   useEffect(() => {
-    localStorage.setItem("ssma_products", JSON.stringify(products));
+    console.log("💾 Saving to localStorage:", products.length, "products");
+    try {
+      localStorage.setItem("ssma_products", JSON.stringify(products));
+      console.log("✅ Saved successfully");
+    } catch (error) {
+      console.error("❌ Error saving to localStorage:", error);
+    }
   }, [products]);
 
   const addProduct = (product) => {
